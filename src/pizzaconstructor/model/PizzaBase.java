@@ -1,21 +1,35 @@
 package pizzaconstructor.model;
 
-public class PizzaBase {
+import pizzaconstructor.interfaces.Displayable;
+import pizzaconstructor.interfaces.Identifiable;
+import pizzaconstructor.interfaces.Priceable;
+
+import java.util.UUID;
+
+public class PizzaBase implements Identifiable, Priceable, Displayable{
+    private final UUID id;
     private String name;
     private double price;
     private boolean classicBase;
 
     public PizzaBase(String name, double price, boolean classicBase) {
+        this.id = UUID.randomUUID();
         this.name = name;
         this.price = price;
         this.classicBase = classicBase;
     }
 
+    @Override
     public double getPrice() {
         return price;
     }
 
     public String getName() {
+        return name;
+    }
+
+    @Override
+    public String getDisplayName() {
         return name;
     }
 
@@ -42,5 +56,10 @@ public class PizzaBase {
 
     public String toString() {
         return getFullInfo();
+    }
+
+    @Override
+    public UUID getId() {
+        return null;
     }
 }

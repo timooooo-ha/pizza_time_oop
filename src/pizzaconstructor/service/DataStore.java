@@ -5,6 +5,7 @@ import pizzaconstructor.model.Pizza;
 import pizzaconstructor.model.PizzaBase;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DataStore {
     private static DataStore instance;
@@ -29,6 +30,21 @@ public class DataStore {
 
     public List<Ingredient> getIngredientList() {
         return Collections.unmodifiableList(ingredientList);
+    }
+
+    public boolean removeIngredient(UUID id) {
+        return ingredientList.removeIf(i -> i.getId().equals(id));
+    }
+
+    public boolean isIngredientUsed(UUID id) {
+        boolean inPizza = pizzas.stream().anyMatch(p -> p.getIngredientList().stream().anyMatch(i -> i.getId().equals(id)));
+        return inPizza;
+    }
+
+    public List<Ingredient> filterIngredientsByName(String name) {
+        return ingredientList.stream()
+                .filter(i -> i.getName().toLowerCase().contains(name.toLowerCase()))
+                .collect(Collectors.toList());
     }
 
     public void addBase(PizzaBase base) {
