@@ -35,7 +35,7 @@ public class PizzaBase implements Identifiable, Priceable, Displayable{
 
     public String getFullInfo() {
         String type = classicBase ? " [классическая]" : "";
-        return String.format("%s - %.2f руб.%s", name, price, type);
+        return String.format("%s - %.2f руб.%s [%s]", name, price, type, id);
     }
 
     public void setName(String name) {
@@ -60,6 +60,6 @@ public class PizzaBase implements Identifiable, Priceable, Displayable{
 
     @Override
     public UUID getId() {
-        return null;
+        return id;
     }
 }

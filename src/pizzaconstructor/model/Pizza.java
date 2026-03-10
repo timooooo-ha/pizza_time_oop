@@ -1,10 +1,16 @@
 package pizzaconstructor.model;
 
+import pizzaconstructor.interfaces.Displayable;
+import pizzaconstructor.interfaces.Identifiable;
+import pizzaconstructor.interfaces.Priceable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
-public class Pizza {
+public class Pizza implements Identifiable, Displayable, Priceable {
+    private final UUID id;
     private String name;
     private List<Ingredient> ingredientList;
     private PizzaBase base;
@@ -13,17 +19,29 @@ public class Pizza {
         if (base == null) {
             throw new IllegalArgumentException("Основа обязательна для пиццы");
         }
+        this.id = UUID.randomUUID();
         this.base = base;
         this.ingredientList = ingredientList;
         this.name = name;
+    }
+
+    @Override
+    public UUID getId() {
+        return id;
     }
 
     public double getIngredientsPrice() {
         return ingredientList.stream().mapToDouble(Ingredient::getPrice).sum();
     }
 
+    @Override
     public double getPrice() {
         return base.getPrice() + getIngredientsPrice();
+    }
+
+    @Override
+    public String getDisplayName() {
+        return name;
     }
 
     public String getFullInfo() {
@@ -58,6 +76,10 @@ public class Pizza {
 
     public void setIngredientList(List<Ingredient> ingredientList) {
         this.ingredientList = new ArrayList<>(ingredientList);
+    }
+
+    public PizzaBase getBase() {
+        return base;
     }
 
     public void setBase(PizzaBase base) {

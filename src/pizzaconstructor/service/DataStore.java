@@ -1,5 +1,6 @@
 package pizzaconstructor.service;
 
+import pizzaconstructor.model.Crust;
 import pizzaconstructor.model.Ingredient;
 import pizzaconstructor.model.Pizza;
 import pizzaconstructor.model.PizzaBase;
@@ -13,6 +14,7 @@ public class DataStore {
     private final List<Ingredient> ingredientList = new ArrayList<>();
     private final List<PizzaBase> bases = new ArrayList<>();
     private final List<Pizza> pizzas = new ArrayList<>();
+    private final List<Crust> crusts = new ArrayList<>();
 
     private DataStore() {
     }
@@ -41,6 +43,10 @@ public class DataStore {
         return inPizza;
     }
 
+    public boolean isBaseUsed(UUID id) {
+        return pizzas.stream().anyMatch(p -> p.getBase().getId().equals(id));
+    }
+
     public List<Ingredient> filterIngredientsByName(String name) {
         return ingredientList.stream()
                 .filter(i -> i.getName().toLowerCase().contains(name.toLowerCase()))
@@ -49,6 +55,10 @@ public class DataStore {
 
     public void addBase(PizzaBase base) {
         bases.add(base);
+    }
+
+    public void removeBase(UUID id) {
+        bases.removeIf(b -> b.getId().equals(id));
     }
 
     public List<PizzaBase> getBases() {
@@ -65,6 +75,22 @@ public class DataStore {
 
     public List<Pizza> getPizzas() {
         return Collections.unmodifiableList(pizzas);
+    }
+
+    public boolean removePizza(UUID id) {
+        return pizzas.removeIf(p -> p.getId().equals(id));
+    }
+
+    public void addCrust(Crust crust) {
+        crusts.add(crust);
+    }
+
+    public List<Crust> getCrusts() {
+        return Collections.unmodifiableList(crusts);
+    }
+
+    public boolean removeCrust(UUID id) {
+        return crusts.removeIf(c -> c.getId().equals(id));
     }
 
     public void initSampleData() {
