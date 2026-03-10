@@ -44,6 +44,7 @@ public class Pizza implements Identifiable, Displayable, Priceable {
         return name;
     }
 
+    @Override
     public String getFullInfo() {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("%s - %.2f руб.", name, getPrice()));

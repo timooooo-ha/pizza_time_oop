@@ -69,16 +69,8 @@ public class Crust implements Identifiable, Priceable, Displayable{
         this.name = name;
     }
 
-    public List<Ingredient> getIngredientList() {
-        return Collections.unmodifiableList(ingredientList);
-    }
-
     public void setIngredientList(List<Ingredient> ingredientList) {
         this.ingredientList = new ArrayList<>(ingredientList);
-    }
-
-    public boolean isUseWhitelist() {
-        return useWhitelist;
     }
 
     public void addPizzaId(UUID pizzaId) {

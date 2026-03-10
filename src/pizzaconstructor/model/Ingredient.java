@@ -31,6 +31,7 @@ public class Ingredient implements Identifiable, Priceable, Displayable{
         return name;
     }
 
+    @Override
     public String getFullInfo() {
         return String.format("%s - %.2f руб. [%s]", name, price, id);
     }

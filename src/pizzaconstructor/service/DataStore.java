@@ -1,10 +1,8 @@
 package pizzaconstructor.service;
 
-import pizzaconstructor.model.Crust;
-import pizzaconstructor.model.Ingredient;
-import pizzaconstructor.model.Pizza;
-import pizzaconstructor.model.PizzaBase;
+import pizzaconstructor.model.*;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -15,6 +13,7 @@ public class DataStore {
     private final List<PizzaBase> bases = new ArrayList<>();
     private final List<Pizza> pizzas = new ArrayList<>();
     private final List<Crust> crusts = new ArrayList<>();
+    private final List<Order> orders = new ArrayList<>();
 
     private DataStore() {
     }
@@ -39,8 +38,7 @@ public class DataStore {
     }
 
     public boolean isIngredientUsed(UUID id) {
-        boolean inPizza = pizzas.stream().anyMatch(p -> p.getIngredientList().stream().anyMatch(i -> i.getId().equals(id)));
-        return inPizza;
+        return pizzas.stream().anyMatch(p -> p.getIngredientList().stream().anyMatch(i -> i.getId().equals(id)));
     }
 
     public boolean isBaseUsed(UUID id) {
@@ -81,6 +79,13 @@ public class DataStore {
         return pizzas.removeIf(p -> p.getId().equals(id));
     }
 
+    public List<Pizza> filterPizzasByIngredient(String ingredientName) {
+        return pizzas.stream()
+                .filter(p -> p.getIngredientList().stream()
+                        .anyMatch(i -> i.getName().toLowerCase().contains(ingredientName.toLowerCase())))
+                .collect(Collectors.toList());
+    }
+
     public void addCrust(Crust crust) {
         crusts.add(crust);
     }
@@ -91,6 +96,26 @@ public class DataStore {
 
     public boolean removeCrust(UUID id) {
         return crusts.removeIf(c -> c.getId().equals(id));
+    }
+
+    public void addOrder(Order order) {
+        orders.add(order);
+    }
+
+    public List<Order> getOrders() {
+        return Collections.unmodifiableList(orders);
+    }
+
+    public List<Order> filterOrdersByDate(LocalDate date) {
+        return orders.stream()
+                .filter(o -> o.getOrderTime().toLocalDate().equals(date))
+                .collect(Collectors.toList());
+    }
+
+    public List<Crust> getAvailableCrusts(Pizza pizza) {
+        return crusts.stream()
+                .filter(c -> c.canBeUsedWith(pizza))
+                .collect(Collectors.toList());
     }
 
     public void initSampleData() {
@@ -111,8 +136,11 @@ public class DataStore {
 
         Pizza margherita = new Pizza("Маргарита", classic, Arrays.asList(tomato, cheese, basil));
         Pizza pepperoniPizza = new Pizza("Пепперони", classic, Arrays.asList(tomato, cheese, pepperoni));
-        Pizza funghi = new Pizza("Грибная", classic, Arrays.asList(tomato, cheese, mushrooms));
         Pizza chickenPizza = new Pizza("Куриная", classic, Arrays.asList(chicken, cheese, tomato, olives));
-        pizzas.addAll(Arrays.asList(margherita, pepperoniPizza, funghi, chickenPizza));
+        pizzas.addAll(Arrays.asList(margherita, pepperoniPizza, chickenPizza));
+
+        Crust cheeseCrust = new Crust("С сыром", Arrays.asList(cheese), false);
+        Crust sesameCrust = new Crust("С кунжутом", Arrays.asList(sesame), false);
+        crusts.addAll(Arrays.asList(cheeseCrust, sesameCrust));
     }
 }

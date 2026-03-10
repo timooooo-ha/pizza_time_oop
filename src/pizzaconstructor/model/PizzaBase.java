@@ -33,6 +33,7 @@ public class PizzaBase implements Identifiable, Priceable, Displayable{
         return name;
     }
 
+    @Override
     public String getFullInfo() {
         String type = classicBase ? " [классическая]" : "";
         return String.format("%s - %.2f руб.%s [%s]", name, price, type, id);
@@ -50,10 +51,7 @@ public class PizzaBase implements Identifiable, Priceable, Displayable{
         return classicBase;
     }
 
-    public void setClassicBase(boolean classicBase) {
-        this.classicBase = classicBase;
-    }
-
+    @Override
     public String toString() {
         return getFullInfo();
     }
